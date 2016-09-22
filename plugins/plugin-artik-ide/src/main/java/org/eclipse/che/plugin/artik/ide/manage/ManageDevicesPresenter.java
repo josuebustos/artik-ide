@@ -18,9 +18,9 @@ import com.google.gwt.user.client.Timer;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 
-import org.eclipse.che.api.machine.shared.dto.LimitsDto;
 import org.eclipse.che.api.machine.shared.dto.MachineConfigDto;
 import org.eclipse.che.api.machine.shared.dto.MachineDto;
+import org.eclipse.che.api.machine.shared.dto.MachineLimitsDto;
 import org.eclipse.che.api.machine.shared.dto.MachineSourceDto;
 import org.eclipse.che.api.machine.shared.dto.event.MachineStatusEvent;
 import org.eclipse.che.api.machine.shared.dto.recipe.NewRecipe;
@@ -647,7 +647,7 @@ public class ManageDevicesPresenter implements ManageDevicesView.ActionDelegate,
 
         String recipeURL = selectedDevice.getRecipe().getLink("get recipe script").getHref();
 
-        LimitsDto limitsDto = dtoFactory.createDto(LimitsDto.class).withRam(1024);
+        MachineLimitsDto limitsDto = dtoFactory.createDto(MachineLimitsDto.class).withRam(1024);
         MachineSourceDto sourceDto = dtoFactory.createDto(MachineSourceDto.class).withType("ssh-config").withLocation(recipeURL);
 
         MachineConfigDto configDto = dtoFactory.createDto(MachineConfigDto.class)
@@ -657,13 +657,7 @@ public class ManageDevicesPresenter implements ManageDevicesView.ActionDelegate,
                 .withLimits(limitsDto)
                 .withType(ARTIK_CATEGORY);
 
-        Promise<MachineDto> machinePromise = workspaceServiceClient.createMachine(appContext.getWorkspace().getId(), configDto);
-
-        machinePromise.then(new Operation<MachineDto>() {
-            @Override
-            public void apply(final MachineDto machineDto) throws OperationException {
-            }
-        });
+        Promise<Void> machinePromise = workspaceServiceClient.createMachine(appContext.getWorkspace().getId(), configDto);
 
         machinePromise.catchError(new Operation<PromiseError>() {
             @Override

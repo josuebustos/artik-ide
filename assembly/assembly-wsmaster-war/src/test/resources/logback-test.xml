@@ -12,10 +12,15 @@
       Samsung Electronics Co., Ltd. - Initial implementation
 
 -->
-<Context allowCasualMultipartParsing="true">
-    <Valve className="org.apache.catalina.valves.rewrite.RewriteValve"/>
+<configuration>
 
-    <ResourceLink global="che"
-                  name="jdbc/che"
-                  type="javax.sql.DataSource"/>
-</Context>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-41(%date[%.15thread]) %-45([%-5level] [%.30logger{30} %L]) - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+    </root>
+
+</configuration>
